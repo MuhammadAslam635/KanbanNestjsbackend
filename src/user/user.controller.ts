@@ -12,9 +12,9 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Get('/board/:boardId')
+  findAll(@Param('boadrId') boardId: number) {
+    return this.userService.findAllUserByBoardId(boardId);
   }
 
   @Get(':id')

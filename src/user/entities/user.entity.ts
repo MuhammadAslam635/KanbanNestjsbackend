@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert } from 'typeorm';
+import * as bcrypt from "bcrypt";
 export enum UserType {
     ADMIN = 'admin',
     MODERATOR = 'moderator',
@@ -21,8 +22,14 @@ export class User {
     @Column({ length: 200 })
     email: string;
 
-    @Column({ length: 1000 })
+    @Column({ length: 200 })
     password: string;
+    @BeforeInsert()
+    async hashPassword(){
+        if(this.password){
+            this.password = await bcrypt.hash(this.password,10);
+        }
+    }
 
     @Column({
         type: 'enum',
